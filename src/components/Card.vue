@@ -1,0 +1,103 @@
+<template>
+  <li @dblclick="moveCard(id)"
+      class="columns-container__column-created-cards-cards-row-item-list-card-item border-rad-5 m-5 padding-10">
+    <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card text-small">
+      <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card-header">
+        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-header-text">
+          <span class="columns-container__column-created-cards-cards-row-item-list-card-item-header-text-title-status">
+            {{title}} - [{{status}}]
+          </span>
+          <span class="columns-container__column-created-cards-cards-row-item-list-card-item-header-text-author-creation-date">
+            {{author}}
+            <br>
+            {{dateOfCreation}}
+          </span>
+        </p>
+      </div>
+      <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body">
+        <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-actions">
+        <button @click="toggleEditing()"
+            class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-actions-edit pointer no-border border-rad-5">
+          <font-awesome-icon icon="pencil-alt" class="icon" />
+        </button>
+          <br>
+          <button @click="deleteCard(id)"
+              class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-actions-delete pointer no-border border-rad-5">
+          <font-awesome-icon icon="trash-alt" />
+          </button>
+        </div>
+        <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-info">
+        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-description">{{description}}</p>
+        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-dates-start" v-if="dateOfWorkStart !== ''">Дата начала работы: {{dateOfWorkStart}}</p>
+        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-timestamp" v-if="timeSpend !== 0">Потраченные часы: {{timeSpend}}</p>
+        </div>
+      </div>
+    </div>
+  </li>
+</template>
+
+<script>
+export default {
+  name: "Card",
+  props:{
+    id:Number,
+  title:String,
+  description:String,
+  author:String,
+  dateOfCreation:String,
+  dateOfWorkStart:String,
+  status:String,
+  timeSpend:Number,
+},
+  methods:{
+    moveCard(id){this.$emit("move-card", id);},
+    deleteCard(id) {this.$emit('delete-card', id)},
+    toggleEditing(){this.$emit('toggle-editing')}
+  },
+  emits: ['move-card', 'delete-card', 'toggle-editing']
+}
+</script>
+
+<style lang="scss">
+@import '../assets/styles/variables';
+@import '../assets/styles/mixins';
+@import '../assets/styles/modifiers';
+.columns-container__column-created-cards-cards-row-item-list-card-item{
+  background: #fff;
+  &-card-header{font-weight: 600;}
+  &-header-text{
+    @include display-flex;
+    border-bottom: solid 2px #f6f6f6;
+    justify-content: space-between;
+    flex-direction: row;
+    &-author-creation-date{text-align: end;}
+  }
+  &-card-body-dates-start{border-top: solid 2px #f6f6f6;}
+  &-card-body-actions{
+    text-align: end;
+    position: relative;
+      button{
+        opacity: 0;
+        position: absolute;
+        right: 1%;
+        margin: 1px;
+        padding: 3px;
+      }
+    button:hover{
+      opacity: 0.5;
+      background: #b6b6b6;
+      border-radius: 5px;
+    }
+      &-edit{
+        @include transparent;
+        @include action-hover('hover');
+        top: 1%
+      }
+      &-delete{
+        @include transparent;
+        @include action-hover('hover');
+        top: 120%;
+      }
+  }
+}
+</style>
