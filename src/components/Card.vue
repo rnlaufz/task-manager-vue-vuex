@@ -1,5 +1,5 @@
 <template>
-  <li @dblclick="moveCard(id)"
+  <li @dblclick="moveCard(id, status)"
       class="columns-container__column-created-cards-cards-row-item-list-card-item border-rad-5 m-5 padding-10">
     <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card text-small">
       <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card-header">
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
   name: "Card",
   props:{
@@ -50,7 +51,10 @@ export default {
   timeSpend:Number,
 },
   methods:{
-    moveCard(id){this.$emit("move-card", id);},
+    ...mapActions(['manageCards']),
+    moveCard(id){
+      this.manageCards(id, status)
+      this.$emit("move-card", id);},
     deleteCard(id) {this.$emit('delete-card', id)},
     toggleEditing(){this.$emit('toggle-editing')}
   },

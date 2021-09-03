@@ -22,7 +22,7 @@
       <!--  Отключить если нет такого поля (в сделанных)  -->
       <div v-if="cardStatus !=='created'" class="forms-container__edit-card-form-form-control">
         <label class="forms-container__edit-card-form-form-control-label" for="start-date">Дата начала работы</label>
-        <input v-model="dateOfWorkStart" type="date" class="forms-container__edit-card-for-form-control-input" name="start-date"
+        <input v-model="dateOfWorkStart" type="date" class="forms-container__edit-card-form-form-control-input" name="start-date"
                id="start-date">
       </div>
       <div class="forms-container__edit-card-form-form-control">
