@@ -40,7 +40,7 @@ export default {
       title:          '',
       description:    '',
       author:         '',
-      dateOfCreation: new Date().toLocaleDateString("RUS"),
+      dateOfCreation: new Date().toDateString(),
       dateOfWorkStart: '',
       timeSpend:      0
     }
@@ -56,7 +56,7 @@ export default {
         description:     this.description,
         author:          this.author,
         dateOfCreation:  this.dateOfCreation,
-        dateOfWorkStart: this.dateOfWorkStart !== "" ? new Date(this.dateOfWorkStart).toLocaleDateString("RUS") : "",
+        dateOfWorkStart: this.dateOfWorkStart !== "" ? this.dateOfWorkStart : "",
         status:          this.columnStatus,
         timeSpend:       this.timeSpend
       };

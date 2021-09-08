@@ -28,7 +28,7 @@
         </div>
         <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-info">
         <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-description">{{description}}</p>
-        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-dates-start" v-if="dateOfWorkStart !== ''">Дата начала работы: {{new Date(dateOfWorkStart).toLocaleDateString("RUS")}}</p>
+        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-dates-start" v-if="dateOfWorkStart !== '' && status !== 'создана'">Дата начала работы: {{new Date(dateOfWorkStart).toLocaleDateString("RUS")}}</p>
         <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-timestamp" v-if="timeSpend !== 0">Потраченные часы: {{timeSpends}}</p>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default {
     timeSpends: function(){
       if(this.status === "в работе"){
         let startDate = new Date(this.dateOfWorkStart)
-        let countHours = Number.parseInt(((this.today - startDate) / (1000 * 3600 * 24))*8);
+        let countHours = Number.parseInt(((this.today - startDate) / (1000 * 3600 * 24)*8));
         // Объект для передачи в vuex - нужен т.к хранилище не принимает два аргумента
         let data = {
           id: this.id,
@@ -104,8 +104,7 @@ export default {
         opacity: 0;
         position: absolute;
         right: 1%;
-        margin: 1px;
-        padding: 3px;
+        padding: 2px;
       }
     button:hover{
       opacity: 0.5;
@@ -120,7 +119,7 @@ export default {
       &-delete{
         @include transparent;
         @include action-hover('hover');
-        top: 120%;
+        top: 95%;
       }
   }
 }

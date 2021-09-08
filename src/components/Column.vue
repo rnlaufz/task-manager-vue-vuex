@@ -3,21 +3,6 @@
     <h3 class="columns-container__column-created-cards-header"> {{ columnHeader }}</h3>
     <div class="columns-container__column-created-cards-cards-row">
       <ul class="columns-container__column-created-cards-cards-row-item-list no-decorator">
-        <!--        <Card @move-card="moveCard(card.id)"-->
-        <!--              @delete-card="deletingCard(card.id)"-->
-        <!--              @toggle-editing="toggleEditing(card.id, card.status)"-->
-        <!--              v-bind:key="card.id +`C`"-->
-        <!--              v-for="card in this.columnType === 'created' ? this.createdCards : this.columnType === 'in-work' ?-->
-        <!--              this.processCards : this.columnType === 'completed' ? this.completedCards : [] "-->
-        <!--              :id="card.id"-->
-        <!--              :title="card.title"-->
-        <!--              :description="card.description"-->
-        <!--              :author="card.author"-->
-        <!--              :dateOfCreation="card.dateOfCreation"-->
-        <!--              :dateOfWorkStart="card.dateOfWorkStart"-->
-        <!--              :status="columnType === 'created' ? 'создана' : columnType === 'in-work' ?-->
-        <!--              'в процессе' : columnType === 'completed' ? 'завершена' : ''"-->
-        <!--              :timeSpend="card.timeSpend"/>-->
         <Card @move-card="moveCard(card.id)"
               @delete-card="deletingCard(card.id)"
               @toggle-editing="toggleEditing(card.id, card.status)"
@@ -27,8 +12,8 @@
               :title="card.title"
               :description="card.description"
               :author="card.author"
-              :dateOfCreation="card.dateOfCreation"
-              :dateOfWorkStart="card.dateOfWorkStart"
+              :dateOfCreation='card.dateOfCreation'
+              :dateOfWorkStart='card.dateOfWorkStart'
               :status="cardStatuses"
               :timeSpend="card.timeSpend"/>
       </ul>
