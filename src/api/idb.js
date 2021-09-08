@@ -60,9 +60,9 @@ export default {
 		}
 	},
 	//  Перемещение
-	async sortCards(id){
-		const request      = indexedDB.open("cards", 1);
-		request.onsuccess  = e => {
+	async sortCards(id) {
+		const request     = indexedDB.open("cards", 1);
+		request.onsuccess = e => {
 			const db          = e.target.result;
 			const tx          = db.transaction("all_cards", "readwrite");
 			const get         = tx.objectStore('all_cards');
@@ -70,10 +70,10 @@ export default {
 			request.onsuccess = e => {
 				// получение данных
 				const cursor = e.target.result;
-				if(cursor) {
+				if (cursor) {
 					const newStatus = cursor.value;
 					// пересортировка
-					switch(true){
+					switch (true) {
 						case cursor.value.id === id && cursor.value.status === "created":
 							newStatus.status = "in-work";
 							cursor.update(newStatus)
@@ -94,10 +94,10 @@ export default {
 			}
 		}
 	},
-	// Редактирование
-	async editCards(card){
-		const request      = indexedDB.open("cards", 1);
-		request.onsuccess  = e => {
+	//Пересчет часов работы
+	countHours(data) {
+		const request     = indexedDB.open("cards", 1);
+		request.onsuccess = e => {
 			const db          = e.target.result;
 			const tx          = db.transaction("all_cards", "readwrite");
 			const get         = tx.objectStore('all_cards');
@@ -105,17 +105,39 @@ export default {
 			request.onsuccess = e => {
 				// получение данных
 				const cursor = e.target.result;
-				if(cursor) {
+				if (cursor) {
+					const timeSpend = cursor.value;
+					const {hours, id} = data
+					if (cursor.value.status === "in-work" && cursor.value.id === id) {
+						timeSpend.timeSpend = hours;
+						cursor.update(timeSpend)
+					}
+					cursor.continue()
+				}
+			}
+		}
+	},
+	// Редактирование
+	async editCards(card) {
+		const request     = indexedDB.open("cards", 1);
+		request.onsuccess = e => {
+			const db          = e.target.result;
+			const tx          = db.transaction("all_cards", "readwrite");
+			const get         = tx.objectStore('all_cards');
+			const request     = get.openCursor();
+			request.onsuccess = e => {
+				// получение данных
+				const cursor = e.target.result;
+				if (cursor) {
 					const newCardData = cursor.value;
-					// пересортировка
-					if(cursor.value.id === card.id){
-						newCardData.title = card.title;
-						newCardData.description = card.description;
-						newCardData.author = card.author;
-						newCardData.dateOfCreation = card.dateOfCreation;
+					if (cursor.value.id === card.id) {
+						newCardData.title           = card.title;
+						newCardData.description     = card.description;
+						newCardData.author          = card.author;
+						newCardData.dateOfCreation  = card.dateOfCreation;
 						newCardData.dateOfWorkStart = card.dateOfWorkStart;
-						newCardData.status = card.status;
-						newCardData.timeSpend = card.timeSpend;
+						newCardData.status          = card.status;
+						newCardData.timeSpend       = card.timeSpend;
 						cursor.update(newCardData)
 					}
 					cursor.continue()
@@ -124,17 +146,17 @@ export default {
 		}
 	},
 	// Удаление
-	async deleteCard(id){
-		const request      = indexedDB.open("cards", 1);
-		request.onsuccess  = e => {
+	async deleteCard(id) {
+		const request     = indexedDB.open("cards", 1);
+		request.onsuccess = e => {
 			const db          = e.target.result;
 			const tx          = db.transaction("all_cards", "readwrite");
 			const get         = tx.objectStore('all_cards');
 			const request     = get.openCursor();
 			request.onsuccess = e => {
 				const cursor = e.target.result;
-				if(cursor) {
-					if(cursor.value.id === id){
+				if (cursor) {
+					if (cursor.value.id === id) {
 						cursor.delete(id);
 					}
 					cursor.continue()

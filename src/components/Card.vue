@@ -10,7 +10,7 @@
           <span class="columns-container__column-created-cards-cards-row-item-list-card-item-header-text-author-creation-date">
             {{author}}
             <br>
-            {{dateOfCreation}}
+            {{new Date(dateOfCreation).toLocaleDateString("RUS")}}
           </span>
         </p>
       </div>
@@ -28,8 +28,8 @@
         </div>
         <div class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-info">
         <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-description">{{description}}</p>
-        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-dates-start" v-if="dateOfWorkStart !== ''">Дата начала работы: {{dateOfWorkStart}}</p>
-        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-timestamp" v-if="timeSpend !== 0">Потраченные часы: {{timeSpend}}</p>
+        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-dates-start" v-if="dateOfWorkStart !== ''">Дата начала работы: {{new Date(dateOfWorkStart).toLocaleDateString("RUS")}}</p>
+        <p class="columns-container__column-created-cards-cards-row-item-list-card-item-card-body-timestamp" v-if="timeSpend !== 0">Потраченные часы: {{timeSpends}}</p>
         </div>
       </div>
     </div>
@@ -51,12 +51,32 @@ export default {
   timeSpend:Number,
 },
   methods:{
-    ...mapActions(['manageCards']),
+    ...mapActions(['manageCards', 'countHours']),
     moveCard(id){
       this.manageCards(id, status)
       this.$emit("move-card", id);},
     deleteCard(id) {this.$emit('delete-card', id)},
-    toggleEditing(){this.$emit('toggle-editing')}
+    toggleEditing(){this.$emit('toggle-editing')},
+  },
+  computed:{
+    today:  function(){return new Date()},
+    timeSpends: function(){
+      if(this.status === "в работе"){
+        let startDate = new Date(this.dateOfWorkStart)
+        let countHours = Number.parseInt(((this.today - startDate) / (1000 * 3600 * 24))*8);
+        // Объект для передачи в vuex - нужен т.к хранилище не принимает два аргумента
+        let data = {
+          id: this.id,
+          hours: countHours
+        }
+        this.countHours(data)
+        return countHours
+      }
+      if(this.status === "в работе"){
+        return this.timeSpend
+      }
+      return this.timeSpend
+    }
   },
   emits: ['move-card', 'delete-card', 'toggle-editing']
 }

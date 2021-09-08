@@ -15,6 +15,12 @@
       <div class="forms-container__new-card-form-form-control">
         <input type="text" class="forms-container__new-card-form-form-control-input" name="description" v-model="description" placeholder="Описание">
       </div>
+      <!--  Отключить если нет такого поля (в сделанных)  -->
+      <div v-if="columnStatus !=='created'" class="forms-container__edit-card-form-form-control">
+        <label class="forms-container__edit-card-form-form-control-label" for="start-date">Дата начала работы</label>
+        <input v-model="dateOfWorkStart" type="date" class="forms-container__edit-card-form-form-control-input" name="start-date"
+               id="start-date">
+      </div>
       <div class="forms-container__new-card-form-form-control">
         <input type="submit" class="forms-container__new-card-form-form-control-submit" value="Новая задача">
       </div>
@@ -34,7 +40,8 @@ export default {
       title:          '',
       description:    '',
       author:         '',
-      dateOfCreation: new Date().toDateString(),
+      dateOfCreation: new Date().toLocaleDateString("RUS"),
+      dateOfWorkStart: '',
       timeSpend:      0
     }
   },
@@ -49,7 +56,7 @@ export default {
         description:     this.description,
         author:          this.author,
         dateOfCreation:  this.dateOfCreation,
-        dateOfWorkStart: "",
+        dateOfWorkStart: this.dateOfWorkStart !== "" ? new Date(this.dateOfWorkStart).toLocaleDateString("RUS") : "",
         status:          this.columnStatus,
         timeSpend:       this.timeSpend
       };

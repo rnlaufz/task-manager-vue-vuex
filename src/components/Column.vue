@@ -1,25 +1,35 @@
 <template>
   <div class="columns-container__column-created-cards width-300 gray-bg my-10 padding-10 border-rad-5">
-    <h3 class="columns-container__column-created-cards-header"> {{
-        columnType === "created" ? "Созданные задачи" :
-            columnType === "in-work" ? "Задачи в работе" : columnType === "completed" ? "Завершенные задачи" : columnType
-      }}</h3>
+    <h3 class="columns-container__column-created-cards-header"> {{ columnHeader }}</h3>
     <div class="columns-container__column-created-cards-cards-row">
       <ul class="columns-container__column-created-cards-cards-row-item-list no-decorator">
+        <!--        <Card @move-card="moveCard(card.id)"-->
+        <!--              @delete-card="deletingCard(card.id)"-->
+        <!--              @toggle-editing="toggleEditing(card.id, card.status)"-->
+        <!--              v-bind:key="card.id +`C`"-->
+        <!--              v-for="card in this.columnType === 'created' ? this.createdCards : this.columnType === 'in-work' ?-->
+        <!--              this.processCards : this.columnType === 'completed' ? this.completedCards : [] "-->
+        <!--              :id="card.id"-->
+        <!--              :title="card.title"-->
+        <!--              :description="card.description"-->
+        <!--              :author="card.author"-->
+        <!--              :dateOfCreation="card.dateOfCreation"-->
+        <!--              :dateOfWorkStart="card.dateOfWorkStart"-->
+        <!--              :status="columnType === 'created' ? 'создана' : columnType === 'in-work' ?-->
+        <!--              'в процессе' : columnType === 'completed' ? 'завершена' : ''"-->
+        <!--              :timeSpend="card.timeSpend"/>-->
         <Card @move-card="moveCard(card.id)"
               @delete-card="deletingCard(card.id)"
               @toggle-editing="toggleEditing(card.id, card.status)"
               v-bind:key="card.id +`C`"
-              v-for="card in this.columnType === 'created' ? this.createdCards : this.columnType === 'in-work' ?
-              this.processCards : this.columnType === 'completed' ? this.completedCards : [] "
+              v-for="card in this.sortedCards"
               :id="card.id"
               :title="card.title"
               :description="card.description"
               :author="card.author"
               :dateOfCreation="card.dateOfCreation"
               :dateOfWorkStart="card.dateOfWorkStart"
-              :status="columnType === 'created' ? 'создана' : columnType === 'in-work' ?
-              'в процессе' : columnType === 'completed' ? 'завершена' : ''"
+              :status="cardStatuses"
               :timeSpend="card.timeSpend"/>
       </ul>
     </div>
@@ -34,7 +44,7 @@
 </template>
 
 <script>
-import Card from "@/components/Card";
+import Card from "./Card";
 import {mapActions} from 'vuex';
 
 export default {
@@ -58,8 +68,47 @@ export default {
       this.$emit('toggle-new', status)
     }
   },
+  computed:   {
+    sortedCards:  function() {
+      if (this.columnType === "created") {
+        return this.createdCards
+      }
+      if (this.columnType === "in-work") {
+        return this.processCards
+      }
+      if (this.columnType === "completed") {
+        return this.completedCards
+      }
+      return this.columnType
+    },
+    columnHeader: function() {
+      if (this.columnType === "created") {
+        return "Созданные задачи"
+      }
+      if (this.columnType === "in-work") {
+        return "Задачи в работе"
+      }
+      if (this.columnType === "completed") {
+        return "Завершенные задачи"
+      }
+      return this.columnType
+    },
+    cardStatuses: function() {
+      if (this.columnType === "created") {
+        return "создана"
+      }
+      if (this.columnType === "in-work") {
+        return "в работе"
+      }
+      if (this.columnType === "completed") {
+        return "завершена"
+      }
+      return this.columnType
+    }
+  },
   emits:      ['move-card', 'delete-card', 'toggle-editing', "toggle-new"],
 }
+
 </script>
 
 <style lang="scss">

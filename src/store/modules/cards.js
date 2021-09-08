@@ -23,6 +23,10 @@ const actions = {
 		idb.sortCards(id)
 		commit('manageCards')
 	},
+	async countHours({commit}, data){
+		idb.countHours(data);
+		commit("countHours")
+	},
 	async editCard({commit}, data) {
 		idb.editCards(data)
 		commit('editCard', data)
@@ -54,9 +58,9 @@ const mutations = {
 			}
 		})
 	},
-	manageCards: state => state
+	manageCards: state => state,
+	countHours: state => state
 }
-
 export default {
 	state,
 	getters,
